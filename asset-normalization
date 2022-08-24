@@ -1,0 +1,46 @@
+# Instalandoa lib
+install yfinance
+
+# Importanto libs
+
+import yfinance as yf
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Criando um df com os ativos escolhidos
+
+ativos = ['PETR4','VALE3', 'ABEV3', 'WEGE3', 'OIBR3', 'ITSA4']
+
+# Adicionando o .SA em cada ativo, pois a lib exige a terminação .SA em cada ticker
+
+ativos = [i + '.SA' for i in ativos]
+
+# Criando data de início e final da série
+
+inicio = '2020-01-01'
+fim = '2022-07-28'
+
+# Criando o df com os dados selecionados a partir da função download da lib yf
+
+df = yf.download(ativos, start = inicio, end = fim)['Adj Close']
+
+# Inspecionando o df
+
+df.head()
+
+# Plot do gráfico sem normalização
+
+df.plot(figsize = (8,7))
+
+# Normalizando o df na base 1. Se multiplicar por 100 após o iloc[0] a normalização será feita na base 100, o que não altera em nada.
+
+normalizado = df/df.iloc[0] # colocará todos os dados na base 1
+
+# Inspecionando o df normalizado.
+
+normalizado.head()
+
+# Plot do gráfico normalizado
+
+normalizado.plot(figsize = (8,7))
