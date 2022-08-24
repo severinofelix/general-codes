@@ -1,0 +1,51 @@
+# Instalação de libs
+
+!pip install quandl
+
+# Importação de libs
+
+# Manipulação de dados
+
+import pandas as pd
+import numpy as py
+
+# Visualização de dados
+
+import matplotlib.pyplot as plt
+
+# Importação de dados financeiros
+
+import quandl
+
+# Inserir a chave de API da Quandl
+
+quandl.ApiConfig.api_key = "aqui sua API"
+
+# Coletando dados da selic
+
+selic = quandl.get("BCB/432", start_date = "2000-01-01")
+
+# Coletando dados do CDI
+
+cdi = quandl.get("BCB/4392", start_date = "2000-01-01")
+
+# Plot dos 2 gráficos juntos
+
+fig, ax1 = plt.subplots()
+
+color = 'tab:red'
+ax1.set_xlabel('time (s)')
+ax1.set_ylabel('Taxa selic', color=color)
+ax1.plot(selic, color=color)
+ax1.tick_params(axis='y', labelcolor=color)
+
+ax2 = ax1.twinx() 
+
+color = 'tab:green'
+ax2.set_ylabel('CDI', color=color) 
+ax2.plot(cdi,color=color)
+ax2.tick_params(axis='y', labelcolor=color)
+
+fig.tight_layout() 
+plt.legend()
+plt.show()
