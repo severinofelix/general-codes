@@ -1,0 +1,49 @@
+# Importando libs
+
+import ta
+import investpy
+import pandas as pd
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+# Criando o df com os dados do Ibovespa
+
+df = investpy.search_quotes(text = 'bvsp', products = ['indices'],
+                      countries = ['brazil'], n_results = 10)
+                      
+# Fazendo uma busca em dados que contenham o Ibovespa
+
+for search_result in df:
+    print(search_result)
+    
+
+# Filtrando o dado correto
+
+for search_result in df[:1]:
+    print(search_result)
+    
+# Fazendo um filtro de datas
+
+ibov = search_result.retrieve_historical_data(from_date = '01/01/2012', to_date = '24/08/2022')
+
+# Inspecionando
+
+ibov.head()
+
+# Importando o método para visualizar a volatilidade
+
+from ta.volatility import AverageTrueRange
+
+# Utilizando o método AverageTrueRange
+
+atr = AverageTrueRange(ibov['High'], ibov['Low'], ibov['Close'])
+
+ibov['ATR'] = atr.average_true_range()
+
+# Plotando o gráfico da volatilidade
+
+fig = make_subplots(rows=2,cols=1)
+fig.add_trace(go.Scatter(name='ATR', x=ibov.index, y=ibov['ATR']), row=2, col=1)
+fig.add_trace(go.Candlestick(name='IBOV', x=ibov.index, close=ibov['Close'], open=ibov['Open'], high = ibov['High'], low=ibov['Low']), row=1, col=1)
+fig.update_layout(xaxis_rangeslider_visible=False, title_text = 'IBOV')
+fig.show()
