@@ -1,0 +1,29 @@
+# Instalando biblioteca Python Binance
+
+!pip install python-binance
+
+# Importanto o método utilizado e a biblioteca pandas
+
+from binance.client import Client
+import pandas as pd
+
+# Criando o acesso in real time para BTCUSDT
+
+client = Client(api_key = 'sua API key aqui',
+                api_secret = 'sua API secret aqui')
+
+# Coleta dos dados
+
+while True:   
+  btcusdt = client.get_klines(symbol='BTCUSDT', 
+                              interval=Client.KLINE_INTERVAL_1MINUTE)
+                              
+# Utilizando um for para retirar dados desnecessários e recebendo a atualização dos dados em tempo real.
+
+  for line in btcusdt:
+    del line[5:] 
+  btcusdt_df = pd.DataFrame(btcusdt, columns=['date', 'open', 'high', 'low', 'close'])
+  btcusdt_df.set_index('date', inplace=True)
+  btcusdt_df.index = pd.to_datetime(btcusdt_df.index, unit='ms')
+  btcusdt_df['close'] = pd.to_numeric(btcusdt_df['close'])
+  print(btcusdt_df['close'].tail(1).to_string())
