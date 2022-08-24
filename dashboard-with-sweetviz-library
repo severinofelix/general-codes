@@ -1,0 +1,21 @@
+# Instalando lib
+
+!pip install sweetviz
+
+# Importando a lib
+
+import sweetviz as sv
+import pandas as pd
+
+# Após coletar os dados dos ativos no yahoo finance, importa a mesma.
+
+planilha = pd.read_csv("Bovespa.csv")
+
+# Inspecionando 
+
+planilha.head()
+
+# Utilizando o método analyze. Automaticamente será criado um HTML com o dashboard.
+
+report = sv.analyze(planilha)
+report.show_html()
